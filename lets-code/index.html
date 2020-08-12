@@ -1,1 +1,121 @@
-test
+<html>
+<header>
+    <title>Let's Code!</title>
+    <style type="text/css">
+        body {
+            font: 16px Helvetica, Sans-Serif;
+            line-height: 24px;
+            background: url(images/noise.jpg);
+        }
+
+        a {
+            font-style: italic;
+            color: #666;
+            text-decoration: none;
+            border-bottom: 1px dotted #666;
+            font-weight: bold;
+        }
+
+        a:hover {
+            font-style: italic;
+            border-bottom-style: solid;
+            color: black;
+            font-weight: bold;
+        }
+
+        #answer-to-who-has-the-telescope {
+            visibility: hidden;
+        }
+    </style>
+    <script>
+        function showAnswer() {
+            document.getElementById("answer-to-who-has-the-telescope").style
+                .visibility = "visible";
+        }
+    </script>
+</header>
+
+<body>
+    <h1>Let's Code!</h1>
+    <h2>Introduction</h2>
+    <p>
+        Before I let you all in on what I have in mind let me share a few
+        thoughts that are at the core of my thinking regarding computer
+        programming...
+    </p>
+    <h3>Most people have the ability to learn programming</h3>
+    <p>
+        So it is not a question of whether a person can learn how to program, it
+        is a question of whether they'd like it enough to stick with it to the
+        point that they can create software for themselves or develop a
+        marketable skill.
+    </p>
+    <h3>
+        Programming is much like learning the foreign language of a people with
+        a totally foreign culture
+    </h3>
+    <p>
+        I'm not much into Stark Trek but I suppose we can liken computers
+        Vulcans in how they are governed by logic. It is your job to convey
+        instructions to it in a logical way because computers will do exactly
+        what you tell them to do; nothing more and nothing less. I guess they
+        are also much like Noah in that they do "just so".
+    </p>
+    <h3>
+        Natural languages are very imprecise
+    </h3>
+    <p>
+        Unfortunately, English (as most if not all natural languages) is very
+        imprecise. For example, take the statement "the man looked at the lady
+        with the telescope". At first glance you might think you understand that
+        statement. But question: who has the telescope? Take your time and think
+        carefully. We'd love for you to post your answer in the WhatsApp group
+        before selecting the answer below.
+    </p>
+    <p>
+        <input type="radio" id="man" name="personWithTelescope" value="man" onclick="showAnswer();">
+        <label for="man">the man</label><br>
+        <input type="radio" id="lady" name="personWithTelescope" value="lady" onclick="showAnswer();">
+        <label for="lady">lady</label><br>
+    </p>
+    <p id="answer-to-who-has-the-telescope">
+        The reality is that the statement is too ambiguous to positively
+        identify who has the telescope. The man could have been using the
+        telescope to look at the lady or the man could have been looking at the
+        lady who happened to have the telescope in her hand.
+
+        Because natural languages are so imprecise we can't use them to
+        communicate with computers. We need languages that don't leave any room
+        for ambiguity in the instructions we are trying to give the computer.
+        That is where computer languages come in. And there are hundreds of
+        them; each with their pros and cons.
+    </p>
+    <h3>Learning by doing</h3>
+    <p>
+        I took one year of French in high school. The teacher insisted that we
+        spend the whole year learning to read and write French, conjugate verbs,
+        and the like. The second year we were to start actually speaking the
+        language. Needless to say, I didn't learn French 😢
+
+        Instead of a having something structured like they do in schools with
+        lesson plans and all, I would like this to be more like learning a
+        language by moving to the a foreign country and being immersed in the
+        culture. I guess it's more like learn by doing, or watching someone else
+        (namely me) do it.
+    </p>
+    <p>
+        So far I think we have friends from Bolivia, Mexico, Philippines, Puerto
+        Rico, and the United States. Some here are starting from zero while
+        others make a living as computer programmers. The reasons for being here
+        also vary greatly - some to learn to program, others to practice
+        English, etc. I hope the whole thing ends up being informative to those
+        that are learning and at the very least entertaining to the veterans.
+
+        The next thing we need to do may be the most challenging. When can we
+        have our first Zoom meeting to get started? Perhaps we should begin by
+        letting the WhatsApp group know when we each have our midweek, and
+        weekend meetings. When you do please let us know your time zone. Thanks!
+    </p>
+</body>
+
+</html>

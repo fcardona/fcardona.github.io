@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Editor v1</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.1/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.1/theme/material-ocean.min.css">
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background-color: #1e1e1e;
+            color: #ffffff;
+            font-family: 'Courier New', monospace;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #editor-container {
+            flex: 1;
+            display: flex;
+        }
+
+        .editor {
+            height: 100%;
+            width: 50%;
+            border-right: 1px solid #444;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .output {
+            height: 100%;
+            width: 50%;
+            /* padding: 10px; */
+            background-color: #1e1e1e;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            display: flex;
+            flex-direction: column;
+            /* font-size: 14px;
+            color: #8f93a2; */
+        }
+
+        #output {
+            padding: 5px;
+        }
+
+        .divider {
+            cursor: ew-resize;
+            width: 5px;
+            background-color: #444;
+            height: 100%;
+        }
+
+        .CodeMirror {
+            height: 100%;
+            font-size: 14px;
+            color: #f8f8f2;
+            background: #282a36;
+            line-height: 1.8;
+        }
+
+        button {
+            margin: 10px;
+            padding: 10px;
+            background-color: #007acc;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #005f99;
+        }
+
+        .pane-label {
+            padding: 5px;
+            background-color: #333;
+            text-align: center;
+            border-bottom: 1px solid #444;
+        }
+
+        .cm-s-material-ocean.CodeMirror {
+
+            background-color: #1e1e1e;
+        }
+
+        .cm-s-material-ocean .CodeMirror-gutters {
+            background-color: #272822;
+        }
+    </style>
+</head>
+
+<body>
+    <button id="run">Run Code</button>
+    <div id="editor-container">
+        <div class="editor">
+            <div class="pane-label">Code Editor</div>
+            <textarea id="code" name="code"></textarea>
+        </div>
+        <div class="divider" id="divider"></div>
+        <div class="output">
+            <div class="pane-label">Output</div>
+            <div id="output"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.1/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.1/mode/javascript/javascript.min.js"></script>
+    <script>
+        // Capture console.log messages
+        const outputDiv = document.getElementById("output");
+        console.log = function (message) {
+            outputDiv.innerText += message + "\n"; // Append message to output div
+            outputDiv.scrollTop = outputDiv.scrollHeight; // Scroll to bottom
+        };
+
+        var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+            lineNumbers: true,
+            mode: "javascript",
+            theme: "material-ocean",
+            tabSize: 2,
+            matchBrackets: true,
+        });
+
+        // Sample code for editing
+        //         editor.setValue(`// Write your JavaScript code here
+        // function helloWorld() {
+        //     console.log("Hello, World!");
+        // }
+        // helloWorld();`);
+
+        // Function to run the code
+        function runCode() {
+            outputDiv.innerText = ""; // Clear previous output
+            try {
+                eval(editor.getValue()); // Execute the code
+            } catch (e) {
+                console.error(e);
+                outputDiv.innerText += "Error: " + e.message; // Display error
+            }
+        }
+
+        // Run code when the button is clicked
+        document.getElementById("run").onclick = runCode;
+
+        // Run code with Ctrl + Enter
+        document.addEventListener("keydown", function (event) {
+            if (event.ctrlKey && event.key === "Enter") {
+                event.preventDefault();
+                runCode();
+            }
+        });
+
+        // Draggable divider functionality
+        const divider = document.getElementById("divider");
+        let isDragging = false;
+
+        divider.addEventListener('mousedown', function (e) {
+            isDragging = true; // Start dragging
+        });
+
+        document.addEventListener('mousemove', function (e) {
+            if (isDragging) {
+                const editorContainer = document.getElementById("editor-container");
+                const totalWidth = editorContainer.clientWidth;
+                const newWidth = e.clientX / totalWidth * 100; // Set width as a percentage
+                document.querySelector('.editor').style.width = newWidth + '%'; // Adjust editor width
+                document.querySelector('.output').style.width = (100 - newWidth) + '%'; // Adjust output width
+            }
+        });
+
+        document.addEventListener('mouseup', function () {
+            isDragging = false; // Stop dragging when mouse is released
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcards</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            /* height: 100vh; */
+            background-color: #f4f4f4;
+        }
+
+        .flashcard {
+            width: 400px;
+            height: 200px;
+            margin: 50px;
+            perspective: 1000px;
+        }
+
+        .card-inner {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .card-front,
+        .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 5px;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            background-color: #ddd;
+        }
+
+        .flip-button {
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="flashcards-container">
+        <div class="flashcard" id="card1">
+            <div class="card-inner">
+                <div class="card-front">What are three congnitive processes, or mental activities, involved in
+                    programming?</div>
+                <div class="card-back">Short Term Memory (STM), Long Term Memory (LTM), and Working Memory.</div>
+            </div>
+            <button class="flip-button" onclick="flipCard('card1')">Flip</button>
+        </div>
+
+        <div class="flashcard" id="card2">
+            <div class="card-inner">
+                <div class="card-front">Define Long Term Memory (LTM)</div>
+                <div class="card-back">The place where all your memories, or knowledge, are stored for a long period of
+                    time.</div>
+            </div>
+            <button class="flip-button" onclick="flipCard('card2')">Flip</button>
+        </div>
+
+        <div class="flashcard" id="card3">
+            <div class="card-inner">
+                <div class="card-front">Define Short Term Memory (STM)</div>
+                <div class="card-back">The place where you temprarily store information you are gathering. Your STM is
+                    used to briefly hold incoming informaion. The STM has a limited size. When your brain has solved the
+                    problme at hand your STM is emptied.</div>
+            </div>
+            <button class="flip-button" onclick="flipCard('card3')">Flip</button>
+        </div>
+
+        <div class="flashcard" id="card4">
+            <div class="card-inner">
+                <div class="card-front">Define Working Memory</div>
+                <div class="card-back">The place where your thinking happens. Working memory where the information from
+                    STM and LTM is processed while you think about it. This is where new thoughts, ideas, and solutions
+                    are formed.</div>
+            </div>
+            <button class="flip-button" onclick="flipCard('card4')">Flip</button>
+        </div>
+
+        <div class="flashcard" id="card5">
+            <div class="card-inner">
+                <div class="card-front">What is a variable</div>
+                <div class="card-back">A variable is a "named" container or storage for data.</div>
+            </div>
+            <button class="flip-button" onclick="flipCard('card5')">Flip</button>
+        </div>
+
+        <div class="flashcard" id="card6">
+            <div class="card-inner">
+                <div class="card-front">What does the keyword "let" do?</div>
+                <div class="card-back">It tells or declares JavaScript that you are creating a variable.</div>
+            </div>
+            <button class="flip-button" onclick="flipCard('card6')">Flip</button>
+        </div>
+
+        <div class="flashcard" id="card7">
+            <div class="card-inner">
+                <div class="card-front">What is the name of the following operator?<br>=</div>
+                <div class="card-back">The assignment operator. It is used to assign, or put, data into a variable.
+                </div>
+            </div>
+            <button class="flip-button" onclick="flipCard('card7')">Flip</button>
+        </div>
+
+        <div class="flashcard" id="card8">
+            <div class="card-inner">
+                <div class="card-front">What characters can be used for a variable's name?</div>
+                <div class="card-back">
+                    a-z, A-Z, 0-9, $, _
+                </div>
+            </div>
+            <button class="flip-button" onclick="flipCard('card8')">Flip</button>
+        </div>
+
+        <div class="flashcard" id="card9">
+            <div class="card-inner">
+                <div class="card-front">What is camel case?</div>
+                <div class="card-back">
+                    The practice of capitalizing each word in a variable name except for the first
+                    word.
+                </div>
+            </div>
+            <button class="flip-button" onclick="flipCard('card9')">Flip</button>
+        </div>
+
+        <div class="flashcard" id="card10">
+            <div class="card-inner">
+                <div class="card-front">What keyword can you use to see the "type" of a variable?</div>
+                <div class="card-back">
+                    typeof
+                </div>
+            </div>
+            <button class="flip-button" onclick="flipCard('card10')">Flip</button>
+        </div>
+    </div>
+
+    <script>
+        // Function to flip the card
+        function flipCard(cardId) {
+            const cardInner = document.querySelector(`#${cardId} .card-inner`);
+            cardInner.style.transform = cardInner.style.transform === 'rotateY(180deg)' ? '' : 'rotateY(180deg)';
+        }
+
+        // Function to shuffle cards
+        function shuffleCards() {
+            const container = document.getElementById('flashcards-container');
+            const cards = Array.from(container.children);
+            const shuffledCards = cards.sort(() => Math.random() - 0.5);
+            container.innerHTML = '';  // Clear existing cards
+            shuffledCards.forEach(card => container.appendChild(card));  // Append shuffled cards
+        }
+
+        // Shuffle cards on page load
+        window.onload = shuffleCards;
+
+    </script>
+</body>
+
+</html>

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Code Editor v1</title>
+    <title>Code Editor v2</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.1/codemirror.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.1/theme/material-ocean.min.css">
     <style>
@@ -115,7 +115,17 @@
         // Capture console.log messages
         const outputDiv = document.getElementById("output");
         console.log = function (message) {
-            outputDiv.innerText += message + "\n"; // Append message to output div
+            // Check if the message is an object and not null
+            if (typeof message === 'object' && message !== null) {
+                // Create a formatted string with spaces after the colons.
+                message = `{ ${Object.entries(message).map(([key, val]) => `${key}: ${JSON.stringify(val)}`).join(', ')} }`;
+            } else {
+                // Convert other types of messages to string
+                message = String(message);
+            }
+
+            // Append the message to the output div
+            outputDiv.innerText += message + "\n";
             outputDiv.scrollTop = outputDiv.scrollHeight; // Scroll to bottom
         };
 

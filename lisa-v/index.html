@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lisa V Flashcards</title>
+    <style>
+        :root {
+            color-scheme: dark;
+            --bg: #07111f;
+            --bg-soft: rgba(10, 18, 32, 0.82);
+            --panel-border: rgba(148, 163, 184, 0.2);
+            --text: #e5eefc;
+            --muted: #95a3bc;
+            --accent: #38bdf8;
+            --accent-2: #f59e0b;
+            --shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(56, 189, 248, 0.2), transparent 32%),
+                radial-gradient(circle at top right, rgba(245, 158, 11, 0.16), transparent 28%),
+                linear-gradient(135deg, #050b14 0%, #0b1321 52%, #101a2c 100%);
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 48px 48px;
+            mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), transparent 90%);
+        }
+
+        main {
+            width: min(1180px, calc(100% - 32px));
+            margin: 0 auto;
+            padding: 32px 0 56px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero {
+            display: grid;
+            gap: 18px;
+            grid-template-columns: 1.4fr 0.9fr;
+            align-items: stretch;
+            margin-bottom: 24px;
+        }
+
+        .hero-card,
+        .stats-card {
+            background: var(--bg-soft);
+            border: 1px solid var(--panel-border);
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(12px);
+        }
+
+        .hero-card {
+            padding: 28px;
+        }
+
+        .eyebrow {
+            margin: 0 0 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.22em;
+            font-size: 0.78rem;
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(2rem, 4vw, 3.6rem);
+            line-height: 1.02;
+        }
+
+        .lead {
+            margin: 14px 0 0;
+            max-width: 68ch;
+            color: var(--muted);
+            font-size: 1.02rem;
+            line-height: 1.65;
+        }
+
+        .stats-card {
+            padding: 22px;
+            display: grid;
+            gap: 16px;
+            align-content: start;
+        }
+
+        .stat-grid {
+            display: grid;
+            gap: 12px;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .stat {
+            padding: 16px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .stat span {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+
+        .stat strong {
+            font-size: 1.6rem;
+            letter-spacing: -0.03em;
+        }
+
+        .progress-wrap {
+            display: grid;
+            gap: 10px;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            font-size: 0.92rem;
+            color: var(--muted);
+            align-items: center;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            border-radius: 999px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .progress-bar>div {
+            height: 100%;
+            width: 0;
+            border-radius: inherit;
+            background: linear-gradient(90deg, var(--accent), var(--accent-2));
+            transition: width 260ms ease;
+        }
+
+        .flip-button {
+            border: 1px solid rgba(56, 189, 248, 0.45);
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--text);
+            border-radius: 999px;
+            padding: 10px 16px;
+            font: inherit;
+            font-weight: 700;
+        }
+
+        .flip-button {
+            cursor: pointer;
+        }
+
+        .flip-button:hover,
+        .flip-button:focus-visible {
+            background: rgba(56, 189, 248, 0.18);
+            outline: none;
+        }
+
+        .days {
+            display: grid;
+            gap: 18px;
+        }
+
+        .day-section {
+            padding: 20px;
+            border-radius: 28px;
+            background: rgba(7, 15, 28, 0.66);
+            border: 1px solid var(--panel-border);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        .day-section.is-focus {
+            border-color: rgba(56, 189, 248, 0.5);
+            background: linear-gradient(160deg, rgba(10, 22, 39, 0.96), rgba(11, 19, 33, 0.82));
+            box-shadow: 0 28px 70px rgba(0, 0, 0, 0.42), 0 0 0 1px rgba(56, 189, 248, 0.12) inset;
+        }
+
+        .day-section.is-secondary {
+            padding-bottom: 14px;
+        }
+
+        .day-section.is-secondary[open] {
+            background: rgba(7, 15, 28, 0.8);
+        }
+
+        .day-section.is-secondary>summary {
+            list-style: none;
+            cursor: pointer;
+        }
+
+        .day-section.is-secondary>summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .secondary-hint {
+            color: var(--accent);
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-top: 10px;
+        }
+
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 18px;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .day-title {
+            margin: 0;
+            font-size: 1.35rem;
+        }
+
+        .day-meta {
+            margin-top: 6px;
+            color: var(--muted);
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+
+        .day-badge {
+            flex: none;
+            padding: 9px 14px;
+            border-radius: 999px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            background: rgba(56, 189, 248, 0.12);
+            color: #9ae6ff;
+            border: 1px solid rgba(56, 189, 248, 0.25);
+        }
+
+        .day-badge.locked {
+            background: rgba(245, 158, 11, 0.12);
+            color: #ffd08a;
+            border-color: rgba(245, 158, 11, 0.24);
+        }
+
+        .day-badge.focus {
+            background: rgba(34, 197, 94, 0.12);
+            color: #b8f5c9;
+            border-color: rgba(34, 197, 94, 0.25);
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 18px;
+            align-items: start;
+        }
+
+        .flashcard {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            width: 100%;
+            margin: 0;
+            perspective: 1200px;
+        }
+
+        .flashcard:focus-within .flip-button {
+            outline: 3px solid rgba(56, 189, 248, 0.7);
+            outline-offset: 3px;
+        }
+
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 230px;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+            display: block;
+        }
+
+        .flashcard.is-flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-face {
+            position: absolute;
+            inset: 0;
+            border-radius: 22px;
+            padding: 18px 18px 16px;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            gap: 12px;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            overflow: hidden;
+        }
+
+        .flashcard-front {
+            background: linear-gradient(160deg, rgba(15, 23, 42, 0.96), rgba(15, 34, 61, 0.96));
+            border: 1px solid rgba(148, 163, 184, 0.22);
+        }
+
+        .flashcard-back {
+            transform: rotateY(180deg);
+            background: linear-gradient(160deg, rgba(12, 34, 29, 0.98), rgba(9, 28, 44, 0.98));
+            border: 1px solid rgba(34, 197, 94, 0.22);
+        }
+
+        .card-label {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: var(--muted);
+        }
+
+        .card-text {
+            margin: 0;
+            font-size: 1rem;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+            max-width: 28ch;
+        }
+
+        .locked-panel {
+            padding: 26px;
+            border-radius: 22px;
+            border: 1px dashed rgba(245, 158, 11, 0.45);
+            background: linear-gradient(160deg, rgba(245, 158, 11, 0.08), rgba(15, 23, 42, 0.58));
+            display: grid;
+            gap: 12px;
+        }
+
+        .locked-panel h3 {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        .locked-panel p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.55;
+        }
+
+        .lock-note {
+            color: #ffd08a;
+            font-weight: 700;
+        }
+
+        @media (max-width: 860px) {
+            .hero {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            main {
+                width: min(100% - 20px, 1180px);
+                padding-top: 20px;
+            }
+
+            .hero-card,
+            .stats-card,
+            .day-section {
+                border-radius: 22px;
+            }
+
+            .day-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .flashcard {
+                min-height: 200px;
+            }
+
+            .flashcard-inner {
+                min-height: 200px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <section class="hero" aria-labelledby="page-title">
+            <div class="hero-card">
+                <p class="eyebrow">Lisa V flashcards</p>
+                <h1 id="page-title">Daily unlocks for August 18 to August 24</h1>
+                <p class="lead">Study the cards daily as they unlock. Write down any questions that you may have so we
+                    can discuss them in our next session.</p>
+            </div>
+            <aside class="stats-card" aria-label="Study progress">
+                <div class="stat-grid">
+                    <div class="stat">
+                        <span>Unlocked days</span>
+                        <strong id="unlocked-days">0</strong>
+                    </div>
+                    <div class="stat">
+                        <span>Available cards</span>
+                        <strong id="available-cards">0</strong>
+                    </div>
+                    <div class="stat">
+                        <span>Total cards</span>
+                        <strong id="total-cards">31</strong>
+                    </div>
+                    <div class="stat">
+                        <span>Timezone</span>
+                        <strong id="timezone-label">Local</strong>
+                    </div>
+                </div>
+                <div class="progress-wrap">
+                    <div class="progress-label">
+                        <span>Daily unlock progress</span>
+                        <span id="progress-text">0 of 7 days open</span>
+                    </div>
+                    <div class="progress-bar" aria-hidden="true">
+                        <div id="progress-fill"></div>
+                    </div>
+                </div>
+            </aside>
+        </section>
+
+        <div id="days" class="days"></div>
+    </main>
+
+    <script id="flashcard-data" type="application/json">[
+    {
+        "date": "2026-08-18",
+        "cards": [
+            {
+                "front": "What does HTML stand for?",
+                "back": "Hypertext Markup Language"
+            },
+            {
+                "front": "What is HTML mainly used for?",
+                "back": "HTML is used to mark up and structure the sections of a web page, such as headings, paragraphs, lists, and other areas"
+            },
+            {
+                "front": "What does CSS stand for?",
+                "back": "Cascading Style Sheets"
+            },
+            {
+                "front": "What is CSS mainly used for?",
+                "back": "CSS controls the visual styling of a web page, such as fonts, colors, layout, and text direction"
+            },
+            {
+                "front": "What is JavaScript mainly used for in web development?",
+                "back": "JavaScript adds functionality and interactivity to web pages. It can also change HTML content and CSS styling"
+            }
+        ]
+    },
+    {
+        "date": "2026-08-19",
+        "cards": [
+            {
+                "front": "What are the three main technologies used in a web page?",
+                "back": "HTML, CSS, and JavaScript"
+            },
+            {
+                "front": "What does a browser do when a web address is typed in?",
+                "back": "The browser makes a request to a server, and the server returns a web page"
+            },
+            {
+                "front": "What is an HTML tag?",
+                "back": "An HTML tag is a piece of markup used to identify parts of a web page"
+            },
+            {
+                "front": "How can you tell the difference between an opening tag and a closing tag?",
+                "back": "A closing tag has a forward slash as the second character, while an opening tag does not"
+            },
+            {
+                "front": "What kind of slash is used in closing HTML tags?",
+                "back": "A forward slash"
+            }
+        ]
+    },
+    {
+        "date": "2026-08-20",
+        "cards": [
+            {
+                "front": "What word in \"Hypertext Markup Language\" was emphasized as most important to remember?",
+                "back": "Markup"
+            },
+            {
+                "front": "What is an HTML element?",
+                "back": "An element is the opening tag, its content, and the closing tag taken together"
+            },
+            {
+                "front": "What can opening tags include besides the tag name?",
+                "back": "Opening tags can include attributes, which provide additional information to the browser"
+            },
+            {
+                "front": "What are self-closing tags used for?",
+                "back": "They are used for tags that do not need content between opening and closing tags, such as an image reference"
+            },
+            {
+                "front": "What is the purpose of the HTML head section?",
+                "back": "The head contains information about the page that is usually not visible and is mainly for the browser"
+            }
+        ]
+    },
+    {
+        "date": "2026-08-21",
+        "cards": [
+            {
+                "front": "What does the HTML title tag do?",
+                "back": "The title tag sets the page title shown in the browser tab"
+            },
+            {
+                "front": "What does an HTTP status code of 200 mean?",
+                "back": "It means the request was successful and the server returned the requested information"
+            },
+            {
+                "front": "What does an HTTP status code of 301 mean?",
+                "back": "It means Moved Permanently"
+            },
+            {
+                "front": "Why doesn't a web page appear all at once when it loads?",
+                "back": "Because the browser progressively processes the HTML and other resources as they arrive"
+            },
+            {
+                "front": "What was said about the page description in HTML?",
+                "back": "The description helps browsers and search engines understand what the page is about, and it can be used in search results"
+            }
+        ]
+    },
+    {
+        "date": "2026-08-22",
+        "cards": [
+            {
+                "front": "What is a favicon?",
+                "back": "A favicon is the small icon shown on a browser tab for a website"
+            },
+            {
+                "front": "Does CSS change the content of a page?",
+                "back": "No. CSS changes how the content looks visually, not the content itself"
+            },
+            {
+                "front": "What are some examples of things CSS can control?",
+                "back": "CSS can control font size, font style, colors, positioning, layout, and text direction"
+            },
+            {
+                "front": "Did the live CSS edits change the actual website for everyone?",
+                "back": "No. The edits only changed the local browser view during the demonstration"
+            }
+        ]
+    },
+    {
+        "date": "2026-08-23",
+        "cards": [
+            {
+                "front": "What browser tool was used to run JavaScript directly on the page?",
+                "back": "The Console in the browser developer tools"
+            },
+            {
+                "front": "In one sentence, what is HTML for?",
+                "back": "HTML is for marking and structuring the sections and content of a web page"
+            },
+            {
+                "front": "In one sentence, what is CSS for?",
+                "back": "CSS is for controlling the visual style and layout of a web page"
+            },
+            {
+                "front": "In one sentence, what is JavaScript for?",
+                "back": "JavaScript is a programming language that adds functionality and can manipulate both HTML and CSS"
+            }
+        ]
+    },
+    {
+        "date": "2026-08-24",
+        "cards": [
+            {
+                "front": "Which technology handles structure?",
+                "back": "HTML = structure/content"
+            },
+            {
+                "front": "Which technology handles style?",
+                "back": "CSS = style/presentation"
+            },
+            {
+                "front": "Which technology handles behavior?",
+                "back": "JavaScript = behavior/functionality"
+            }
+        ]
+    }
+]</script>
+
+    <script>
+        const days = JSON.parse(document.getElementById("flashcard-data").textContent);
+        const timezoneLabel = document.getElementById("timezone-label");
+
+        function startOfLocalDay(date) {
+            const copy = new Date(date);
+            copy.setHours(0, 0, 0, 0);
+            return copy;
+        }
+
+        function parseLocalDate(dateString) {
+            const [year, month, day] = dateString.split("-").map(Number);
+            return new Date(year, month - 1, day);
+        }
+
+        function formatDate(date) {
+            return new Intl.DateTimeFormat("en-US", {
+                weekday: "short",
+                month: "short",
+                day: "numeric"
+            }).format(date);
+        }
+
+        function getPreviewDateParam() {
+            const params = new URLSearchParams(window.location.search);
+            const previewDate = params.get("previewDate");
+
+            if (!previewDate) {
+                return null;
+            }
+
+            const parsed = parseLocalDate(previewDate);
+            return Number.isNaN(parsed.getTime()) ? null : previewDate;
+        }
+
+        function setPreviewDateParam(dateString) {
+            const nextUrl = new URL(window.location.href);
+
+            if (dateString) {
+                nextUrl.searchParams.set("previewDate", dateString);
+            } else {
+                nextUrl.searchParams.delete("previewDate");
+            }
+
+            window.history.replaceState({}, "", nextUrl);
+        }
+
+        function getActiveDate() {
+            const previewDate = getPreviewDateParam();
+            return previewDate ? parseLocalDate(previewDate) : startOfLocalDay(new Date());
+        }
+
+        function createFlashcard(card, dayLabel, cardIndex) {
+            const wrapper = document.createElement("div");
+            wrapper.className = "flashcard";
+
+            const cardInner = document.createElement("div");
+            cardInner.className = "card-inner flashcard-inner";
+            cardInner.innerHTML = `
+                <div class="card-front flashcard-face flashcard-front">
+                    <span class="card-label">${dayLabel} - Card ${cardIndex + 1}</span>
+                    <p class="card-text">${card.front}</p>
+                </div>
+                <div class="card-back flashcard-face flashcard-back">
+                    <span class="card-label">Answer</span>
+                    <p class="card-text">${card.back}</p>
+                </div>
+            `;
+
+            const flipButton = document.createElement("button");
+            flipButton.type = "button";
+            flipButton.className = "flip-button";
+            flipButton.textContent = "Flip";
+            flipButton.setAttribute("aria-label", `Flip ${dayLabel} card ${cardIndex + 1}`);
+            flipButton.addEventListener("click", () => {
+                const flipped = wrapper.classList.toggle("is-flipped");
+                flipButton.textContent = flipped ? "Show front" : "Flip";
+                flipButton.setAttribute("aria-pressed", flipped ? "true" : "false");
+            });
+
+            wrapper.append(cardInner, flipButton);
+            return wrapper;
+        }
+
+        function updatePreviewUi(previewDateParam) {
+            const isPreviewMode = Boolean(previewDateParam);
+            timezoneLabel.textContent = isPreviewMode ? "Preview" : "Local";
+        }
+
+        function renderDays() {
+            const activeDate = startOfLocalDay(getActiveDate());
+            const previewDateParam = getPreviewDateParam();
+            const container = document.getElementById("days");
+            const unlockedDaysElement = document.getElementById("unlocked-days");
+            const availableCardsElement = document.getElementById("available-cards");
+            const progressTextElement = document.getElementById("progress-text");
+            const progressFillElement = document.getElementById("progress-fill");
+
+            container.innerHTML = "";
+
+            const unlockedIndices = days
+                .map((day, index) => ({ index, unlockDate: parseLocalDate(day.date) }))
+                .filter(({ unlockDate }) => unlockDate.getTime() <= activeDate.getTime())
+                .map(({ index }) => index);
+            const focusDayIndex = unlockedIndices.length > 0 ? unlockedIndices[unlockedIndices.length - 1] : -1;
+
+            let unlockedDays = 0;
+            let availableCards = 0;
+
+            days.forEach((day, index) => {
+                const unlockDate = parseLocalDate(day.date);
+                const unlocked = unlockDate.getTime() <= activeDate.getTime();
+                const isFocusDay = unlocked && index === focusDayIndex;
+                const isSecondaryUnlocked = unlocked && index < focusDayIndex;
+                const section = document.createElement(isSecondaryUnlocked ? "details" : "section");
+                section.className = isFocusDay
+                    ? "day-section is-focus"
+                    : isSecondaryUnlocked
+                        ? "day-section is-secondary"
+                        : "day-section";
+
+                if (isSecondaryUnlocked) {
+                    section.open = false;
+                }
+
+                const header = document.createElement("div");
+                header.className = "day-header";
+
+                const titleGroup = document.createElement("div");
+                const title = document.createElement("h2");
+                title.className = "day-title";
+                title.textContent = formatDate(unlockDate);
+
+                const meta = document.createElement("p");
+                meta.className = "day-meta";
+                if (isFocusDay) {
+                    meta.textContent = `${day.cards.length} flashcards available for this date.`;
+                } else if (isSecondaryUnlocked) {
+                    meta.textContent = `${day.cards.length} earlier flashcards from ${formatDate(unlockDate)}. Open to review if needed.`;
+                } else {
+                    meta.textContent = `${day.cards.length} flashcards unlock on ${formatDate(unlockDate)}.`;
+                }
+
+                titleGroup.append(title, meta);
+
+                const badge = document.createElement("div");
+                badge.className = isFocusDay ? "day-badge focus" : unlocked ? "day-badge" : "day-badge locked";
+                badge.textContent = isFocusDay
+                    ? (previewDateParam ? "Preview day" : "Today")
+                    : unlocked
+                        ? (isSecondaryUnlocked ? "Review" : "Unlocked")
+                        : "Locked";
+
+                header.append(titleGroup, badge);
+
+                if (isSecondaryUnlocked) {
+                    const summary = document.createElement("summary");
+                    summary.appendChild(header);
+                    const hint = document.createElement("div");
+                    hint.className = "secondary-hint";
+                    hint.textContent = "Tap to reopen older unlocked cards";
+                    summary.appendChild(hint);
+                    section.appendChild(summary);
+                } else {
+                    section.appendChild(header);
+                }
+
+                if (unlocked) {
+                    unlockedDays += 1;
+                    availableCards += day.cards.length;
+
+                    const grid = document.createElement("div");
+                    grid.className = "card-grid";
+                    day.cards.forEach((card, cardIndex) => {
+                        grid.appendChild(createFlashcard(card, formatDate(unlockDate), cardIndex));
+                    });
+                    section.appendChild(grid);
+                } else {
+                    const lockedPanel = document.createElement("div");
+                    lockedPanel.className = "locked-panel";
+                    lockedPanel.innerHTML = `
+                        <h3>Locked for now</h3>
+                        <p>
+                            These cards unlock on <span class="lock-note">${formatDate(unlockDate)}</span>.
+                            Until then, the section stays hidden behind the selected date.
+                        </p>
+                    `;
+                    section.appendChild(lockedPanel);
+                }
+
+                container.appendChild(section);
+            });
+
+            unlockedDaysElement.textContent = String(unlockedDays);
+            availableCardsElement.textContent = String(availableCards);
+            progressTextElement.textContent = `${unlockedDays} of ${days.length} days open`;
+            progressFillElement.style.width = `${(unlockedDays / days.length) * 100}%`;
+            updatePreviewUi(previewDateParam);
+        }
+
+        renderDays();
+    </script>
+</body>
+
+</html>

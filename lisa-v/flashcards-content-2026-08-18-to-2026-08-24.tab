@@ -1,0 +1,31 @@
+What does HTML stand for?	Hypertext Markup Language
+What is HTML mainly used for?	HTML is used to mark up and structure the sections of a web page, such as headings, paragraphs, lists, and other areas
+What does CSS stand for?	Cascading Style Sheets
+What is CSS mainly used for?	CSS controls the visual styling of a web page, such as fonts, colors, layout, and text direction
+What is JavaScript mainly used for in web development?	JavaScript adds functionality and interactivity to web pages. It can also change HTML content and CSS styling
+What are the three main technologies used in a web page?	HTML, CSS, and JavaScript
+What does a browser do when a web address is typed in?	The browser makes a request to a server, and the server returns a web page
+What is an HTML tag?	An HTML tag is a piece of markup used to identify parts of a web page
+How can you tell the difference between an opening tag and a closing tag?	A closing tag has a forward slash as the second character, while an opening tag does not
+What kind of slash is used in closing HTML tags?	A forward slash
+What word in "Hypertext Markup Language" was emphasized as most important to remember?	Markup
+What is an HTML element?	An element is the opening tag, its content, and the closing tag taken together
+What can opening tags include besides the tag name?	Opening tags can include attributes, which provide additional information to the browser
+What are self-closing tags used for?	They are used for tags that do not need content between opening and closing tags, such as an image reference
+What is the purpose of the HTML head section?	The head contains information about the page that is usually not visible and is mainly for the browser
+What does the HTML title tag do?	The title tag sets the page title shown in the browser tab
+What does an HTTP status code of 200 mean?	It means the request was successful and the server returned the requested information
+What does an HTTP status code of 301 mean?	It means Moved Permanently
+Why doesn't a web page appear all at once when it loads?	Because the browser progressively processes the HTML and other resources as they arrive
+What was said about the page description in HTML?	The description helps browsers and search engines understand what the page is about, and it can be used in search results
+What is a favicon?	A favicon is the small icon shown on a browser tab for a website
+Does CSS change the content of a page?	No. CSS changes how the content looks visually, not the content itself
+What are some examples of things CSS can control?	CSS can control font size, font style, colors, positioning, layout, and text direction
+Did the live CSS edits change the actual website for everyone?	No. The edits only changed the local browser view during the demonstration
+What browser tool was used to run JavaScript directly on the page?	The Console in the browser developer tools
+In one sentence, what is HTML for?	HTML is for marking and structuring the sections and content of a web page
+In one sentence, what is CSS for?	CSS is for controlling the visual style and layout of a web page
+In one sentence, what is JavaScript for?	JavaScript is a programming language that adds functionality and can manipulate both HTML and CSS
+Which technology handles structure?	HTML = structure/content
+Which technology handles style?	CSS = style/presentation
+Which technology handles behavior?	JavaScript = behavior/functionality
